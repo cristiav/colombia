@@ -1,75 +1,39 @@
-import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+
+import Home from "./componentes/home";
+import Favoritos from "./componentes/favoritos";
+import Mapa from "./componentes/mapa";
+import Informativa from "./componentes/informativa";
+import Detalle from "./componentes/detalle";
+import { AppProvider } from './componentes/contexto';
 
 function App() {
-  const data = {
-    departamentos: [
-      {
-        nombre: 'Antioquia',
-        municipios: ['Medellín', 'Envigado', 'Itagüí', 'Bello']
-      },
-      {
-        nombre: 'Cundinamarca',
-        municipios: ['Bogotá', 'Soacha', 'Zipaquirá']
-      },
-      {
-        nombre: 'Valle del Cauca',
-        municipios: ['Cali', 'Palmira', 'Buenaventura']
-      },
-      {
-        nombre: 'Santander',
-        municipios: ['Bucaramanga', 'Floridablanca', 'Girón', 'Piedecuesta']
-      },
-      {
-        nombre: 'Atlántico',
-        municipios: ['Barranquilla', 'Soledad', 'Malambo']
-      }
-    ]
-  };
-
-  const [departamentoSeleccionado, setDepartamentoSeleccionado] = useState(null);
-
-  const handleSeleccion = (departamento) => {
-    setDepartamentoSeleccionado(departamento);
-  };
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial' }}>
-      <h1>🇨🇴 Información de Colombia</h1>
+    <>
+    <AppProvider>
+      <Router>
 
-      <h2>Departamentos</h2>
-      <ul>
-        {data.departamentos.map((dep, index) => (
-          <li
-            key={index}
-            onClick={() => handleSeleccion(dep)}
-            style={{
-              cursor: 'pointer',
-              margin: '5px 0',
-              color: departamentoSeleccionado?.nombre === dep.nombre ? 'blue' : 'black',
-              fontWeight: departamentoSeleccionado?.nombre === dep.nombre ? 'bold' : 'normal'
-            }}
-          >
-            {dep.nombre}
-          </li>
-        ))}
-      </ul>
+          <nav className="c-menu">
+            <Link to="/">Home</Link>
+            <Link to="/informativa">Informativa</Link>
+            <Link to="/mapa">Mapa</Link>
+            <Link to="/favoritos">Favoritos</Link>
+          </nav>
 
-      <hr />
 
-      {departamentoSeleccionado ? (
-        <div>
-          <h3>Municipios de {departamentoSeleccionado.nombre}</h3>
-          <ul>
-            {departamentoSeleccionado.municipios.map((muni, index) => (
-              <li key={index}>{muni}</li>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        <p>Selecciona un departamento para ver sus municipios.</p>
-      )}
-    </div>
-  );
+        <Routes>
+            <Route path="/" element={<Home /> } />
+            <Route path="/informativa" element={<Informativa /> } />
+            <Route path="/mapa" element={<Mapa /> } />
+            <Route path="/favoritos" element={<Favoritos /> } />
+            <Route path="/detalle/:depto/:municipio" element={<Detalle /> } />
+        </Routes>
+      </Router>
+    </AppProvider>
+    </>
+  )
 }
 
-export default App;
+export default App
